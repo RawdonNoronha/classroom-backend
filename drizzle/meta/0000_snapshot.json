@@ -1,5 +1,5 @@
 {
-  "id": "09059440-4819-442b-92b7-b08eafab5ceb",
+  "id": "b1c546a4-c9ce-4283-8787-0b9b0398e2ad",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -97,7 +97,7 @@
         },
         "departmentId": {
           "name": "departmentId",
-          "type": "varchar(255)",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
