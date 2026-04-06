@@ -1,45 +1,29 @@
-// import { eq } from 'drizzle-orm';
-// import { db } from './db';
-// import { demoUsers } from './db/schema';
+import express from 'express';
+import cors from 'cors';
+import subjectsRouter from './db/routes/subjects';
 
-// async function main() {
-//   try {
-//     console.log('Performing CRUD operations...');
+const app = express();
+const PORT = 8000;
 
-//     const [newUser] = await db
-//       .insert(demoUsers)
-//       .values({ name: 'Admin User', email: 'admin@example.com' })
-//       .returning();
+if (!process.env.FRONTEND_URL) throw new Error('FRONTEND_URL is not defined in environment variables');
 
-//     if (!newUser) {
-//       throw new Error('Failed to create user');
-//     }
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}))
 
-//     console.log('✅ CREATE: New user created:', newUser);
+// Middleware
+app.use(express.json());
 
-//     const foundUser = await db.select().from(demoUsers).where(eq(demoUsers.id, newUser.id));
-//     console.log('✅ READ: Found user:', foundUser[0]);
+app.use('/api/subjects', subjectsRouter);
 
-//     const [updatedUser] = await db
-//       .update(demoUsers)
-//       .set({ name: 'Super Admin' })
-//       .where(eq(demoUsers.id, newUser.id))
-//       .returning();
+// Root GET route
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the classroom API' });
+});
 
-//     if (!updatedUser) {
-//       throw new Error('Failed to update user');
-//     }
-
-//     console.log('✅ UPDATE: User updated:', updatedUser);
-
-//     await db.delete(demoUsers).where(eq(demoUsers.id, newUser.id));
-//     console.log('✅ DELETE: User deleted.');
-
-//     console.log('\nCRUD operations completed successfully.');
-//   } catch (error) {
-//     console.error('❌ Error performing CRUD operations:', error);
-//     process.exit(1);
-//   }
-// }
-
-// main();
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
