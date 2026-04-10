@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 
         const subjectsList = await db.select({
             ...getTableColumns(subjects),
-            departments: { ...getTableColumns(departments) }
+            department: { ...getTableColumns(departments) }
         }).from(subjects).leftJoin(departments, eq(subjects.departmentId, departments.id))
             .where(whereClause)
             .orderBy(desc(subjects.createdAt))
