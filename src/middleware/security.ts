@@ -57,7 +57,7 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
             return res.status(403).json({ error: 'Forbidden', message: 'Request blocked by security policy' })
         }
         if (decision.isDenied() && decision.reason.isRateLimit()) {
-            return res.status(403).json({ error: 'Too many message', message })
+            return res.status(429).json({ error: 'Too many message', message })
         }
 
         next();
