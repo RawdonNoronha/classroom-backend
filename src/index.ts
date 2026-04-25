@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import subjectsRouter from './db/routes/subjects';
+import usersRouter from './db/routes/users';
+import classesRouter from './db/routes/classes';
 import securityMiddleware from './middleware/security';
 import { isArcjetKeyValid } from './config/arcjet';
 import { toNodeHandler } from "better-auth/node"
@@ -23,13 +25,15 @@ app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use(express.json());
 
 // Only apply security middleware if ARCJET_KEY is valid and not expired
-if (isArcjetKeyValid()) {
-  app.use(securityMiddleware);
-} else {
-  console.warn('ARCJET_KEY is invalid or expired. Security middleware is disabled.');
-}
+// if (isArcjetKeyValid()) {
+//   app.use(securityMiddleware);
+// } else {
+//   console.warn('ARCJET_KEY is invalid or expired. Security middleware is disabled.');
+// }
 
 app.use('/api/subjects', subjectsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/classes', classesRouter);
 
 // Root GET route
 app.get('/', (req, res) => {
