@@ -74,9 +74,9 @@ CREATE TABLE "verification" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "subjects" DROP CONSTRAINT "subjects_departmentId_departments_id_fk";
+ALTER TABLE "subjects" DROP CONSTRAINT IF EXISTS "subjects_departmentId_departments_id_fk";
 --> statement-breakpoint
-ALTER TABLE "subjects" ADD COLUMN "department_id" integer NOT NULL;--> statement-breakpoint
+ALTER TABLE "subjects" RENAME COLUMN "departmentId" TO "department_id";--> statement-breakpoint
 ALTER TABLE "classes" ADD CONSTRAINT "classes_subject_id_subjects_id_fk" FOREIGN KEY ("subject_id") REFERENCES "public"."subjects"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "classes" ADD CONSTRAINT "classes_teacher_id_user_id_fk" FOREIGN KEY ("teacher_id") REFERENCES "public"."user"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "enrollments" ADD CONSTRAINT "enrollments_student_id_user_id_fk" FOREIGN KEY ("student_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -90,5 +90,4 @@ CREATE INDEX "enrollments_class_id_idx" ON "enrollments" USING btree ("class_id"
 CREATE INDEX "account_user_id_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_user_id_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
-ALTER TABLE "subjects" ADD CONSTRAINT "subjects_department_id_departments_id_fk" FOREIGN KEY ("department_id") REFERENCES "public"."departments"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "subjects" DROP COLUMN "departmentId";
+ALTER TABLE "subjects" ADD CONSTRAINT "subjects_department_id_departments_id_fk" FOREIGN KEY ("department_id") REFERENCES "public"."departments"("id") ON DELETE restrict ON UPDATE no action;
